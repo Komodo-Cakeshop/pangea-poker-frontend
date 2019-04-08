@@ -8,12 +8,15 @@ pangea.API = new Object()
 pangea.API.seats = function(seatArray){
   for (var i=0; i < seatArray.length; i++){
     var seatIndex = seatArray[i]['seat']
-    pangea.seats[seatIndex].update(seatArray[i])
+    console.log('seatIndex: ',seatIndex)
+    pangea.seats[seatIndex].update(seatArray[i])    
+    console.log(pangea.seats[seatIndex])
   }
   pangea.update()
-}
+}   
 
 pangea.API.player = function(playerArray){
+  /*
   for (var param in playerArray){
     if (pangea.player.hasOwnProperty(param)){
       pangea.player[param] = playerArray[param]
@@ -22,10 +25,14 @@ pangea.API.player = function(playerArray){
     }
   }
   pangea.update()
+  */
+  var player_json={"method":"from_player","player":messages}
+  pangea.sendMessage(player_json)
 }
 
 pangea.API.game = function(gameArray){
   for (var param in gameArray){
+    console.log('param ',param)
     if (pangea.game.hasOwnProperty(param)){
       pangea.game[param] = gameArray[param]
     } else {
@@ -102,8 +109,27 @@ pangea.API.checkAutoControls = function(){
 
 pangea.API.chat = function(messages){
   var chatbox = $('#chatbox')
-  for (var i=0; i< messages.length; i++) {
+  chatbox.append('<br>')
+  chatbox.append(messages)
+  
+}
+
+pangea.API.default = function(messages){
+  var chatbox = $('#chatbox')
+  chatbox.append('<br>')
+ for (var i=0; i< messages.length; i++) {
     chatbox.append(messages[i])
-    chatbox.append('<br>')
-  }
+   }
+}
+
+pangea.API.dcv = function(messages){
+ var dcv_json={"method":"from_dcv","dcv":messages}
+ pangea.sendMessage_bvv(dcv_json)
+ pangea.sendMessage_player1(dcv_json)
+ pangea.sendMessage_player2(dcv_json) 
+}
+
+pangea.API.bvv = function(messages){
+ var bvv_json={"method":"from_bvv","bvv":messages}
+ pangea.sendMessage(bvv_json)
 }

@@ -5,9 +5,15 @@ var WebSocket = window.WebSocket
 
 pangea.actions = new Object()
 pangea.actions.join = function(seatnum){
+  /*
   var message = {'action':{'join':seatnum}}
   message = JSON.stringify(message)
   pangea.sendMessage(message)
+  */
+  var obj = {}
+  obj['method']='action'
+  obj['join']=seatnum
+  pangea.sendMessage(JSON.stringify(obj))
 }
 
 pangea.boardcards = []
@@ -21,6 +27,7 @@ pangea.initBoardCards = function(){
 }
 
 pangea.init = function(){
+  console.log('pangea.init called')
   for (var i=0; i<9; i++){
     var newSeat = new pangea.Seat(i)
     pangea.seats.push(newSeat)
@@ -30,6 +37,7 @@ pangea.init = function(){
 }
 
 pangea.update = function(){
+  console.log('pangea.update called')
   pangea.gui.updateSeats()
   for (var seat in pangea.seats){
     pangea.seats[seat].update()
@@ -47,6 +55,7 @@ pangea.update = function(){
   pangea.gui.gametype()
   pangea.gui.playerstack()
   pangea.getTableOrder()
+
   pangea.gui.showboardcards()
   pangea.gui.betSlider()
   pangea.gui.callRaise()
@@ -93,17 +102,92 @@ $('#bet').click(function(){
 })
 
 pangea.sendChat = function(){
+  console.log('pangea.sendChat')
   var chatMessage = $('#chat-input > input').val()
-  pangea.sendMessage({'chat':chatMessage})
+  //pangea.sendMessage({'chat':chatMessage})
   $('#chat-input > input').val('')  
+  var obj={}
+  obj['method']='chat'
+  obj['value']=chatMessage
+  pangea.sendMessage(JSON.stringify(obj))
+}
+
+pangea.sendChat_bvv = function(){
+  console.log('pangea.sendChat_bvv')
+  var chatMessage = $('#chat-input > input').val()
+  //pangea.sendMessage({'chat':chatMessage})
+  $('#chat-input > input').val('')  
+  var obj={}
+  obj['method']='chat'
+  obj['value']=chatMessage
+  pangea.sendMessage_bvv(JSON.stringify(obj))
 }
 
 $('#submitchat').click(function(){
   pangea.sendChat()
+  pangea.sendChat_bvv()
 })
 
+pangea.gameAPI = function(){
+  console.log('game')
+  var chatMessage = 'game'
+  pangea.sendMessage({'method':chatMessage})
+  
+}
+
+$('#game').click(function(){
+  pangea.gameAPI()
+})
+
+pangea.seatsAPI = function(){
+  console.log('seats')
+  var chatMessage = 'seats'
+  pangea.sendMessage({'method':chatMessage})
+  
+}
+
+$('#seats').click(function(){
+  pangea.seatsAPI()
+})
+
+
+pangea.player2 = function(){
+  console.log('player2')
+  pangea.sendMessage_player2({'method':'player_join'})
+}
+$('#player2').click(function(){
+  pangea.player2()
+})
+
+pangea.player1 = function(){
+  console.log('player1')
+  pangea.sendMessage_player1({'method':'player_join'})
+}
+$('#player1').click(function(){
+  pangea.player1()
+})
+
+pangea.bvv = function(){
+  console.log('bvv')
+  var chatMessage = 'bvv'
+  pangea.sendMessage_bvv({'method':chatMessage})
+}
+$('#bvv').click(function(){
+  pangea.bvv()
+})
+
+pangea.dcv = function(){
+  console.log('dcv')
+  var chatMessage = 'dcv'
+  pangea.sendMessage({'method':chatMessage})
+}
+$('#dcv').click(function(){
+  pangea.dcv()
+})
+
+
 pangea.chatKeyPress = function(){
- if(window.event.keyCode==13){
+  if(window.event.keyCode==13){
    pangea.sendChat()
  }
 }
@@ -177,6 +261,7 @@ $('.custom-bet-btn').click(function(){
     $('#bet-amount').val(betAmount)
   }
 })
-
 pangea.init()
 pangea.update()
+
+    
